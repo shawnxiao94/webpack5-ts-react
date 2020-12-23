@@ -1,9 +1,12 @@
 const webpack = require('webpack')
+const path = require('path');
+const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const {
   CleanWebpackPlugin
 } = require('clean-webpack-plugin')
+const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin');
 // 静态资源输出插件
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 // 将CSS提取为独立的文件的插件，对每个包含css的js文件都会创建一个CSS文件，
@@ -113,7 +116,7 @@ const prodPlugins = [
     ]
   })
 ]
-
+// 多入口
 Object.keys(entry).forEach(item => {
   basePlugins.push(
     new HtmlWebpackPlugin({
@@ -136,7 +139,24 @@ Object.keys(entry).forEach(item => {
     })
   )
 });
-
+// 读取mainifest文件中的映射文件动态链接
+try {
+  const files = fs.readdirSync(path.resolve(__dirname, '../dll'));
+  files && files.length && files.forEach(file => {
+    if (/.*\.dll.js/.test(file)) {
+      basePlugins.push(new AddAssetHtmlWebpackPlugin({
+        filepath: path.resolve(__dirname, '../dll', file),
+      }));
+    }
+    if (/.*\.manifest.json/.test(file)) {
+      basePlugins.push(new webpack.DllReferencePlugin({
+        manifest: path.resolve(__dirname, '../dll', file),
+      }));
+    }
+  });
+} catch (err) {
+  console.log(err)
+}
 
 if (config.bundleAnalyzerReport) {
   const {

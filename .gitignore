@@ -8,6 +8,8 @@ npm-debug*
 /.history
 /.awcache
 /deploy
+/dll
+stats.json
 # testing
 /coverage
 
