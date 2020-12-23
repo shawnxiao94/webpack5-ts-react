@@ -1,5 +1,19 @@
-const { assetsPath, resolve } = require('../utils')
-const { threadLoader, cacheLoader } = require('./loaders')
+/*
+ * @Author: your name
+ * @Date: 2020-12-10 10:55:49
+ * @LastEditTime: 2020-12-23 14:32:53
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /webpack5-ts-react/build/rules/fileRules.js
+ */
+const {
+  assetsPath,
+  resolve
+} = require('../utils')
+const {
+  threadLoader,
+  cacheLoader
+} = require('./loaders')
 
 function getUrlloader(assetsPrefix) {
   return {
@@ -13,8 +27,7 @@ function getUrlloader(assetsPrefix) {
   }
 }
 
-module.exports = [
-  {
+module.exports = [{
     test: /\.(png|jpe?g|gif)(\?.*)?$/,
     use: [getUrlloader('images')],
   },
@@ -30,6 +43,6 @@ module.exports = [
     test: /\.svg$/,
     // @svgr/webpack把ts中svg转成react component
     use: [cacheLoader, threadLoader(), '@svgr/webpack'],
-    include: [resolve('src/assets')],
+    include: [resolve('src')],
   },
 ]

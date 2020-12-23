@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import '@/assets/styles/index.less';
+import '@app/assets/styles/index.less'
 
-import registerServiceWorker from './sw'
+import registerServiceWorker from '@/sw'
 registerServiceWorker()
 
 const render = (Component: React.ComponentType) => {

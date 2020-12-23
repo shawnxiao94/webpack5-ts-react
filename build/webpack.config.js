@@ -1,13 +1,6 @@
-/*
- * @Author: your name
- * @Date: 2020-12-10 10:36:36
- * @LastEditTime: 2020-12-22 17:55:57
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /ts-react-hooks-webpack/build/webpack.config.js
- */
 // const openBrowser = require('react-dev-utils/openBrowser')
 
+const entry = require('./entry')
 const config = require('./config')
 const constants = require('./constants')
 const styleRules = require('./rules/styleRules')
@@ -15,7 +8,10 @@ const jsRules = require('./rules/jsRules')
 const fileRules = require('./rules/fileRules')
 const plugins = require('./plugins')
 const optimization = require('./optimization')
-const { assetsPath, resolve } = require('./utils')
+const {
+  assetsPath,
+  resolve
+} = require('./utils')
 
 const devServer = {
   contentBase: "../dist",
@@ -35,13 +31,17 @@ const devServer = {
   proxy: {
     "/project": {
       target: "http://127.0.0.1:8888",
-      pathRewrite: { "^/project": "/" }, // 开头的 /project 路径，会被替换为http://127.0.0.1:8888/路径
+      pathRewrite: {
+        "^/project": "/"
+      }, // 开头的 /project 路径，会被替换为http://127.0.0.1:8888/路径
       ws: true,
       changeOrigin: true // 突破网站对爬虫的限制, 一般都要开启
     },
     "/api": {
       target: "http://localhost:5000", // 代理 mock 服务的请求, 相当于是 /api 开头的全部匹配到 http://localhost:5000/api
-      pathRewrite: { "^/api": "/" },
+      pathRewrite: {
+        "^/api": "/"
+      },
       ws: true,
       changeOrigin: true
     }
@@ -52,18 +52,13 @@ const conf = {
   // 环境
   mode: constants.APP_ENV === 'dev' ? 'development' : 'production',
   /*项目入口*/
-  entry: {
-    // 打包名开头设置为app
-    app: [resolve('src/index.tsx')],
-  },
+  entry,
   /*输出目录*/
   output: {
     path: config.assetsRoot,
     filename: 'js/[name].[contenthash].js',
-    chunkFilename:
-      constants.APP_ENV === 'dev'
-        ? '[name].js'
-        : assetsPath('js/[name].[id].[contenthash].js'),
+    chunkFilename: constants.APP_ENV === 'dev' ?
+      '[name].js' : assetsPath('js/[name].[id].[contenthash].js'),
     publicPath: config.assetsPublicPath,
     pathinfo: false,
   },
@@ -78,7 +73,8 @@ const conf = {
     alias: {
       '@/*': ['src/*'],
       '@': resolve('src'),
-      '@components': resolve('src/components'),
+      '@index': resolve('src/modules/Index'),
+      '@app': resolve('src/modules/App'),
     },
   },
   plugins: [...plugins],
@@ -87,19 +83,5 @@ const conf = {
   target: 'web',
   devtool: config.sourceMap,
 }
-
-// if (process.env.NODE_ENV === 'development') {
-//   conf.devServer = {
-//     // 不显示模块信息
-//     stats: 'errors-warnings',
-//     port: config.devPort,
-//     hot: true,
-//     disableHostCheck: true,
-//     host: '0.0.0.0',
-//     after: function () {
-//       openBrowser(`http://localhost:${config.devPort}`)
-//     }
-//   }
-// }
 
 module.exports = conf

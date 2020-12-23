@@ -6,7 +6,7 @@ import bg_banner from '@/assets/images/bg_banner.png'
 function App() {
   return (
     <div>
-      App90
+      App
       <br />
       <img src={img404} alt="" />
       {process.env.APP_ENVO}

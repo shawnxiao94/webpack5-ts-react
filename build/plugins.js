@@ -25,6 +25,7 @@ const {
   assetsPath
 } = require('./utils')
 const env = require('./env.json')
+const entry = require('./entry')
 
 const oriEnv = env[constants.APP_ENV]
 Object.assign(oriEnv, {
@@ -59,12 +60,6 @@ const basePlugins = [
 const devPlugins = [
   // 支持模块热更新
   new webpack.HotModuleReplacementPlugin(),
-  new HtmlWebpackPlugin({
-    filename: 'index.html',
-    template: 'public/index.html',
-    // 是否将js放在body的末尾
-    inject: true
-  }),
   // 此Webpack插件强制所有必需模块的完整路径与磁盘上实际路径的确切大小写相匹配
   // new CaseSensitivePathsPlugin(),
   // 终端命令窗口自定义打印信息
@@ -82,22 +77,6 @@ const prodPlugins = [
       to: './static',
     }],
     options: {}
-  }),
-  new HtmlWebpackPlugin({
-    filename: 'index.html',
-    template: 'public/index.html',
-    inject: true,
-    // 对html文件进行压缩
-    minify: {
-      // 移除HTML中的注释
-      removeComments: true,
-      // 折叠空白区域 也就是压缩代码
-      collapseWhitespace: true,
-      // 移除属性的引号
-      removeAttributeQuotes: true
-      // more options:
-      // https://github.com/kangax/html-minifier#options-quick-reference
-    },
   }),
   new MiniCssExtractPlugin({
     // Options similar to the same options in webpackOptions.output
@@ -134,6 +113,30 @@ const prodPlugins = [
     ]
   })
 ]
+
+Object.keys(entry).forEach(item => {
+  basePlugins.push(
+    new HtmlWebpackPlugin({
+      filename: `${item}.html`,
+      template: 'public/index.html',
+      // 是否将js放在body的末尾
+      inject: true,
+      chunks: ['runtime', 'vendors', item],
+      // 对html文件进行压缩
+      minify: {
+        // 移除HTML中的注释
+        removeComments: true,
+        // 折叠空白区域 也就是压缩代码
+        collapseWhitespace: true,
+        // 移除属性的引号
+        removeAttributeQuotes: true
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+    })
+  )
+});
+
 
 if (config.bundleAnalyzerReport) {
   const {

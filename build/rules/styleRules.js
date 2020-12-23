@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-10 10:55:28
- * @LastEditTime: 2020-12-21 16:32:54
+ * @LastEditTime: 2020-12-23 14:36:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /ts-react-hooks-webpack/build/rules/styleRules.js
@@ -9,19 +9,21 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const config = require('../config')
-const { resolve } = require('../utils')
+const {
+  resolve
+} = require('../utils')
 const theme = require('../theme')
-const { cacheLoader } = require('./loaders')
+const {
+  cacheLoader
+} = require('./loaders')
 
 const cssLoader = (modules) => ({
   loader: 'css-loader',
   options: {
-    modules: modules
-      ? {
-          mode: 'local',
-          localIdentName: '[local]--[contenthash:base64:8]',
-        }
-      : false,
+    modules: modules ? {
+      mode: 'local',
+      localIdentName: '[local]--[contenthash:base64:8]',
+    } : false,
   },
 })
 
@@ -30,7 +32,9 @@ const sassLoader = {
   options: {
     sassOptions: {
       // 此配置后页面直接引入scss无需路径
-      includePaths: [require('bourbon').includePaths, resolve('src/assets/styles')],
+      includePaths: [require('bourbon').includePaths,
+        resolve('src/assets/styles')
+      ],
     },
     // 或者这样配置
     // includePaths: [resolve('src/assets/styles')]
@@ -54,8 +58,7 @@ const baseLoaders = (modules) => [
   'postcss-loader',
 ]
 
-module.exports = [
-  {
+module.exports = [{
     test: /\.css$/,
     include: [resolve('node_modules')],
     use: baseLoaders(false),
@@ -68,6 +71,7 @@ module.exports = [
   {
     // for ant design
     test: /\.less$/,
+    include: [resolve('src')],
     // less do not use threadLoader
     // https://github.com/webpack-contrib/thread-loader/issues/10
     use: [...baseLoaders(false), lessLoader],
