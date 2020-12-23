@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@ant-design/icons/lib/dist$": ["src/icons.js"],
+      "@components/*": ["src/components/*"],
+      "@img/*": ["src/assets/img/*"]
+    }
+  }
+}
